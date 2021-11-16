@@ -20,9 +20,11 @@ function App() {
   }, []);
 
   if (!pastData || !futureData) {
-    return <div>
-      Failed to load CSV data. Please use the correct CSV file name on your public folder.
-    </div>
+    return (
+      <div>
+        Failed to load CSV data. Please use the correct CSV file name on your public folder.
+      </div>
+    );
   }
 
   return (

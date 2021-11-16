@@ -25,7 +25,7 @@ async function getCsvData(fileName) {
 }
 
 function formatCsvData(data) {
-  if (data && data.data && data.data.length > 0 && data.errors.length > 0) {
+  if (data && data.data && data.data.length > 0 && data.errors.length === 0) {
     return data.data.slice(1, data.data.length - 1).map(row => {
       const date = new Date(row[0]);
       return {
