@@ -4,11 +4,11 @@ import { formatCsvData, getCsvData } from './utils/getCsvData';
 import './App.css';
 
 function App() {
-  const [pastData, setPastData] = useState([]);
-  const [futureData, setFutureData] = useState([]);
+  const [pastData, setPastData] = useState(null);
+  const [futureData, setFutureData] = useState(null);
 
   const loadData = async () => {
-    const data = await getCsvData('Past.csv');
+    const data = await getCsvData('111.csv');
     const data1 = await getCsvData('Future.csv');
 
     setPastData(formatCsvData(data));
@@ -18,6 +18,12 @@ function App() {
   useEffect(() => {
     loadData();
   }, []);
+
+  if (!pastData || !futureData) {
+    return <div>
+      Failed to load CSV data. Please use the correct CSV file name on your public folder.
+    </div>
+  }
 
   return (
     <div className="App">

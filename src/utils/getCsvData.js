@@ -1,21 +1,31 @@
 import Papa from 'papaparse';
 
 async function fetchCsv(fileName) {
-  const response = await fetch(fileName);
-  const reader = response.body.getReader();
-  const result = await reader.read();
-  const decoder = new TextDecoder('utf-8');
-  const csv = await decoder.decode(result.value);
-  return csv;
+  try {
+    const response = await fetch(fileName);
+    const reader = response.body.getReader();
+    const result = await reader.read();
+    const decoder = new TextDecoder('utf-8');
+    const csv = await decoder.decode(result.value);
+    return csv;
+  } catch(e) {
+    console.log('Failed to load CSV file');
+    return null;
+  }
 }
 
 async function getCsvData(fileName) {
-  const data = Papa.parse(await fetchCsv(fileName));
-  return data;
+  const csvFile = await fetchCsv(fileName);
+  if (csvFile) {
+    const data = Papa.parse(csvFile);
+    return data;
+  }
+  
+  return null;
 }
 
 function formatCsvData(data) {
-  if (data && data.data && data.data.length > 0) {
+  if (data && data.data && data.data.length > 0 && data.errors.length > 0) {
     return data.data.slice(1, data.data.length - 1).map(row => {
       const date = new Date(row[0]);
       return {
@@ -26,7 +36,7 @@ function formatCsvData(data) {
     });
   }
 
-  return [];
+  return null;
 }
 
 export { getCsvData, formatCsvData };
